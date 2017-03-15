@@ -541,8 +541,8 @@ end;
 
 procedure TPrimaRenderer.SetIndex(AValue: integer);
 var
-  I, TW, TH, TileSetLen, Origin, BlockSize, BlocksLen, BlockIndex,
-  BlockOrigin, Pos: integer;
+  Origin: int64;
+  I, TW, TH, TileSetLen, BlockSize, BlocksLen, BlockIndex, BlockOrigin, Pos: integer;
   Idx, Len: integer;
   BlockBuf, P: PIntegerArray;
   Src: PByteArray;
@@ -560,10 +560,10 @@ begin
   TileSetLen := TW * TH;
   P := @FTile[TileSetLen];
 
-  Origin := Idx * TileSetLen * SizeOf(integer);
+  Origin := int64(Idx) * TileSetLen * SizeOf(integer);
   BlockSize := FBlockSize;
-  BlockIndex := Origin div BlockSize;
-  BlockOrigin := (Origin - BlockIndex * BlockSize) shr 2;
+  BlockIndex := integer(Origin div int64(BlockSize));
+  BlockOrigin := integer(Origin - int64(BlockIndex) * BlockSize) shr 2;
   BlocksLen := Length(FBlocks);
 
   BlockBuf := GetMem(BlockSize);
@@ -769,4 +769,5 @@ begin
 end;
 
 end.
+
 
